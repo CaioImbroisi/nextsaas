@@ -21,7 +21,7 @@ export default function CreateOrgForm() {
     setLoading(true)
     setError("")
 
-    const res = await fetch("/api/organizations", {
+    const res = await fetch("/api/auth/organizations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, slug: generateSlug(name) }),

@@ -16,6 +16,7 @@ export default function BillingClient({
 }: {
   plans: Plan[]
   activePriceId: string | null
+  orgPlan: string
 }) {
   const [loading, setLoading] = useState<string | null>(null)
 
@@ -100,7 +101,7 @@ const res = await fetch("/api/auth/billing/portal", { method: "POST" })
         </div>
 
         {plans.map(plan => {
-          const isActive = plan.id === activePriceId
+          const isActive = plan.name.toUpperCase() === orgPlan || plan.id === activePriceId
           return (
             <div key={plan.id} style={{
               border: isActive ? "2px solid #111" : "1px solid #e5e7eb",

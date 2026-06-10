@@ -1,13 +1,14 @@
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import { stripe } from "@/lib/stripe"
+import { prisma } from "@/lib/prisma"
 import BillingClient from "./BillingClient"
 
 export default async function BillingPage() {
   const session = await auth()
   if (!session) redirect("/login")
 
-  const [prices, customer] = await Promise.all([
+  const [prices, customer, membership] = await Promise.all([
     stripe.prices.list({
       active: true,
       expand: ["data.product"],
@@ -15,6 +16,10 @@ export default async function BillingPage() {
     }),
     stripe.customers.search({
       query: `email:"${session.user?.email}"`,
+    }),
+    prisma.membership.findFirst({
+      where: { userId: session.user.id },
+      include: { organization: true },
     }),
   ])
 
@@ -39,6 +44,7 @@ export default async function BillingPage() {
     : null
 
   const activePriceId = subscriptions?.data[0]?.items.data[0]?.price.id ?? null
+  const orgPlan = membership?.organization.plan ?? "FREE"
 
   return (
     <div>
@@ -49,7 +55,7 @@ export default async function BillingPage() {
         Gerencie seu plano e assinatura.
       </p>
 
-      <BillingClient plans={plans} activePriceId={activePriceId} />
+      <BillingClient plans={plans} activePriceId={activePriceId} orgPlan={orgPlan} />
     </div>
   )
 }
