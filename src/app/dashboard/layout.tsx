@@ -37,6 +37,9 @@ export default async function DashboardLayout({
         <Link href="/dashboard/billing" style={{ display: "block", padding: "0.5rem", borderRadius: 6, fontSize: 14, color: "#111", textDecoration: "none" }}>
           Billing
         </Link>
+        <Link href="/dashboard/features" style={{ display: "block", padding: "0.5rem", borderRadius: 6, fontSize: 14, color: "#111", textDecoration: "none" }}>
+          Funcionalidades
+        </Link>
         <Link href="/dashboard/settings" style={{ display: "block", padding: "0.5rem", borderRadius: 6, fontSize: 14, color: "#111", textDecoration: "none" }}>
           Configurações
         </Link>
