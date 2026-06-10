@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
 import Link from "next/link"
+import SignOutButton from "@/components/SignOutButton"
 
 export default async function DashboardLayout({
   children,
@@ -44,9 +45,7 @@ export default async function DashboardLayout({
           <p style={{ fontSize: 13, color: "#666", paddingLeft: "0.5rem" }}>
             {session.user?.name ?? session.user?.email}
           </p>
-          <Link href="/api/auth/signout" style={{ display: "block", padding: "0.5rem", borderRadius: 6, fontSize: 14, color: "#ef4444", textDecoration: "none" }}>
-            Sair
-          </Link>
+          <SignOutButton />
         </div>
       </aside>
 
