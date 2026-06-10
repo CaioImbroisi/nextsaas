@@ -8,13 +8,20 @@ export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
     setError("")
+
+    if (password !== confirmPassword) {
+      setError("As senhas não coincidem")
+      return
+    }
+
+    setLoading(true)
 
     const res = await fetch("/api/auth/register", {
       method: "POST",
@@ -73,14 +80,46 @@ export default function RegisterPage() {
             />
           </div>
 
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", marginBottom: 4, fontSize: 14 }}>Confirmar senha</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
+              style={{
+                width: "100%",
+                padding: "8px 12px",
+                borderRadius: 6,
+                border: confirmPassword && password !== confirmPassword
+                  ? "1px solid #ef4444"
+                  : "1px solid #ccc",
+              }}
+            />
+            {confirmPassword && password !== confirmPassword && (
+              <p style={{ fontSize: 12, color: "#ef4444", marginTop: 4 }}>
+                As senhas não coincidem
+              </p>
+            )}
+          </div>
+
           {error && (
-            <p style={{ color: "red", fontSize: 14, marginBottom: "1rem" }}>{error}</p>
+            <p style={{ color: "#ef4444", fontSize: 14, marginBottom: "1rem" }}>{error}</p>
           )}
 
           <button
             type="submit"
-            disabled={loading}
-            style={{ width: "100%", padding: "10px", background: "#000", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer" }}
+            disabled={loading || password !== confirmPassword}
+            style={{
+              width: "100%",
+              padding: "10px",
+              background: password !== confirmPassword ? "#9ca3af" : "#000",
+              color: "#fff",
+              border: "none",
+              borderRadius: 6,
+              cursor: password !== confirmPassword ? "not-allowed" : "pointer",
+            }}
           >
             {loading ? "Criando conta..." : "Criar conta"}
           </button>
